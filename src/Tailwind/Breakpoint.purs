@@ -10,3 +10,10 @@ sm
   => Theme a
   -> Theme b
 sm _ = Theme
+
+lg
+  :: ∀ a b
+   . MapPrefix "lg:" a b
+  => Theme a
+  -> Theme b
+lg _ = Theme
