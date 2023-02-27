@@ -1,10 +1,8 @@
 {-| Auto-generated: Do not change this file manually
 -}
-module Tailwind.Breakpoint
-  ( sm
-  ) where
+module Tailwind.Breakpoint where
 
-import Theme (Theme(..), class MapPrefix)
+import Data.Theme (class MapPrefix, Theme(..))
 
 sm
   :: ∀ a b

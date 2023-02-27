@@ -2,7 +2,7 @@
 -}
 module Tailwind.Base where
 
-import Theme (Theme(..), Skip)
+import Data.Theme (Theme(..), Skip)
 
 css :: Theme Skip
 css = Theme

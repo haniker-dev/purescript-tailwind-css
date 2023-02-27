@@ -8,4 +8,4 @@ module Tailwind
 import Tailwind.Base
 import Tailwind.Breakpoint
 import Tailwind.Pseudo
-import Theme
+import Data.Theme as Theme

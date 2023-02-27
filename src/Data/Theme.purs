@@ -1,10 +1,11 @@
-module Theme
+module Data.Theme
   ( (~)
   , Skip
   , Theme(..)
   , class Appendable
   , class MapPrefix
   , class MapPrefixHelper
+  , mapPrefix
   , merge
   ) where
 
@@ -28,6 +29,7 @@ class Appendable :: Symbol -> Symbol -> Symbol -> Constraint
 class Appendable a b c | a b -> c
 
 instance Appendable Skip b b
+else instance Appendable a Skip a
 else instance Appendable "" b b
 else instance Appendable a "" a
 else instance
@@ -49,8 +51,16 @@ infixr 5 merge as ~
 {-| Map a prefix over a symbol that is separated by spaces
 eg. MapPrefix "sm:" "mt-4 px-2" produces "sm:mt-4 sm:px-2"
 -}
+mapPrefix
+  :: ∀ p a b
+   . MapPrefix p a b
+  => Proxy p
+  -> Theme a
+  -> Theme b
+mapPrefix _ _ = Theme
+
 class MapPrefix :: Symbol -> Symbol -> Symbol -> Constraint
-class MapPrefix prefix inputLabel outputLabel | inputLabel -> outputLabel
+class MapPrefix prefix inputLabel outputLabel | prefix inputLabel -> outputLabel
 
 instance
   -- Set lastHead as " " to generate prefix for first element
@@ -59,7 +69,7 @@ instance
   MapPrefix prefix inputLabel outputLabel
 
 class MapPrefixHelper :: Symbol -> Symbol -> Symbol -> Symbol -> Constraint
-class MapPrefixHelper lastHead prefix inputLabel outputLabel | lastHead prefix inputLabel -> outputLabel
+class MapPrefixHelper lastHead prefix inputLabel outputLabel | prefix inputLabel -> outputLabel
 
 instance MapPrefixHelper lastHead prefix "" ""
 

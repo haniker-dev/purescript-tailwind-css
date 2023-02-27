@@ -2,7 +2,7 @@
 -}
 module Tailwind.Pseudo where
 
-import Theme (Theme(..), class MapPrefix)
+import Data.Theme (Theme(..), class MapPrefix)
 
 hover
   :: ∀ a b
