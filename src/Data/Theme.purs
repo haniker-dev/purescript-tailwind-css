@@ -1,6 +1,6 @@
 module Data.Theme
   ( (~)
-  , Skip
+  , SkipAppendable
   , Theme(..)
   , class Appendable
   , class MapPrefix
@@ -22,14 +22,14 @@ instance IsSymbol a => Show (Theme a) where
   show :: Theme a -> String
   show _ = reflectSymbol (Proxy :: Proxy a)
 
-type Skip :: Symbol
-type Skip = "@@@"
+type SkipAppendable :: Symbol
+type SkipAppendable = "@@@"
 
 class Appendable :: Symbol -> Symbol -> Symbol -> Constraint
 class Appendable a b c | a b -> c
 
-instance Appendable Skip b b
-else instance Appendable a Skip a
+instance Appendable SkipAppendable b b
+else instance Appendable a SkipAppendable a
 else instance Appendable "" b b
 else instance Appendable a "" a
 else instance

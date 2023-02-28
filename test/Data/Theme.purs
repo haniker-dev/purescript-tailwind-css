@@ -2,7 +2,7 @@ module Test.Data.Theme where
 
 import Prelude
 
-import Data.Theme (Skip, Theme(..), mapPrefix, (~))
+import Data.Theme (SkipAppendable, Theme(..), mapPrefix, (~))
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 import Type.Prelude (Proxy(..))
@@ -40,7 +40,7 @@ spec = describe "Theme" do
       let d = (mapPrefix (Proxy :: Proxy "") c :: Theme "c-a c-b")
       show d `shouldEqual` "c-a c-b"
 
-css :: Theme Skip
+css :: Theme SkipAppendable
 css = Theme
 
 a :: Theme "c-a"

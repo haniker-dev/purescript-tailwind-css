@@ -2,10 +2,10 @@
 -}
 module Tailwind.Base where
 
-import Data.Theme (Theme(..), Skip)
+import Data.Theme (Theme(..), SkipAppendable)
 
-css' :: Theme Skip
-css' = Theme
+_css :: Theme SkipAppendable
+_css = Theme
 
 my_4 :: Theme "my-4"
 my_4 = Theme
