@@ -1,14 +1,18 @@
 {
-  "name": "purescript-tailwind",
+  "name": "purescript-tailwind-css",
   "version": "0.0.1",
   "description": "Type-safe CSS with Tailwind",
+  "type": "module",
   "main": "index.js",
+  "bin": {
+    "purs-tailwind-css": "./purs-tailwind-css.js"
+  },
   "scripts": {
     "test": "spago test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/haniker-dev/purescript-tailwind.git"
+    "url": "git+https://github.com/haniker-dev/purescript-tailwind-css.git"
   },
   "keywords": [
     "purescript",
@@ -18,7 +22,7 @@
   "author": "Haniker",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/haniker-dev/purescript-tailwind/issues"
+    "url": "https://github.com/haniker-dev/purescript-tailwind-css/issues"
   },
   "homepage": "https://github.com/haniker-dev/purescript-tailwind#readme"
 }
