@@ -17,3 +17,5 @@ rebuild: FORCE ## Rebuild the app locally
 run-test: ## Run test locally
 	spago test
 
+run-cli: ## Run cli locally
+	./cli/purs-tailwind-css-dev.js --output ./test-generated
