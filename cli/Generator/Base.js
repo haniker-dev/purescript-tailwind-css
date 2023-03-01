@@ -48,7 +48,7 @@ export function _getBaseCssClassNames(twConfigPath) {
 
 /** @type {( path: string ) => Promise<tailwindcss.Config>} */
 async function overwriteTWConfig(path) {
-  const originConfig = await import(join(process.cwd(), path));
+  const originConfig = await import(path);
 
   return {
     ...originConfig,

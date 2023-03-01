@@ -18,4 +18,4 @@ run-test: ## Run test locally
 	spago test
 
 run-cli: ## Run cli locally
-	./cli/purs-tailwind-css-dev.js --output ./test-generated
+	./cli/purs-tailwind-css-dev.js --config ./tailwind.config.js --output ./test-generated

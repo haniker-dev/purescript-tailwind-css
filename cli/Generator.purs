@@ -2,7 +2,10 @@ module Generator (GeneratedResult, generate) where
 
 import Prelude
 
+import Data.Array (fold)
 import Effect.Aff (Aff)
+import Generator.Base as Base
+import Node.Path (FilePath)
 
 type GeneratedResult =
   { base :: String
@@ -11,10 +14,14 @@ type GeneratedResult =
 
   }
 
-generate :: Aff GeneratedResult
-generate =
+-- TODO need to generate screens
+-- TODO need to generate pseudo
+
+generate :: FilePath -> Aff GeneratedResult
+generate twConfigPath = do
+  base <- Base.generate twConfigPath
   pure
-    { base: ""
+    { base: fold base
     , screen: ""
     , pseudo: ""
     }
