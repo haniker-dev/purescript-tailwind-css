@@ -1,6 +1,7 @@
-module Data.FnGenerator
+module Generator.Base
   ( CodeGenInput
-  , generateCode
+  , _getBaseCssClassNames
+  , generate
   ) where
 
 import Prelude
@@ -23,8 +24,8 @@ type DefaultCodeGenInput =
 
 -- TODO need to generate screens
 
-generateCode :: Aff (Array String)
-generateCode =
+generate :: Aff (Array String)
+generate =
   let
     input =
       { dir: fromMaybe "./gen" Nothing
@@ -35,6 +36,7 @@ generateCode =
   in
     fromEffectFnAff $ _getBaseCssClassNames input.configPath inputCss
 
+-- TODO Don't export this
 foreign import _getBaseCssClassNames
   :: String
   -> String

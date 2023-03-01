@@ -1,19 +1,19 @@
-module Test.Data.FnGenerator where
+module Test.Generator.Base where
 
 import Prelude
 
-import Data.FnGenerator (_getClasses)
 import Effect.Aff.Compat (fromEffectFnAff)
+import Generator.Base (_getBaseCssClassNames)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 
 spec :: Spec Unit
-spec = describe "FnGenerator" do
-  describe "_getClasses" do
-    it "generate classes" do
-      r1 <- fromEffectFnAff $ _getClasses configPath classSelector
-      r2 <- fromEffectFnAff $ _getClasses configPath attributeSelector
-      r3 <- fromEffectFnAff $ _getClasses configPath pseudoSelector
+spec = describe "Generator.Base" do
+  describe "_getBaseCssClassNames" do
+    it "_getBaseCssClassNames classes" do
+      r1 <- fromEffectFnAff $ _getBaseCssClassNames configPath classSelector
+      r2 <- fromEffectFnAff $ _getBaseCssClassNames configPath attributeSelector
+      r3 <- fromEffectFnAff $ _getBaseCssClassNames configPath pseudoSelector
 
       r1 `shouldEqual` classes
       r2 `shouldEqual` classes
