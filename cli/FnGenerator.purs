@@ -1,7 +1,6 @@
 module Data.FnGenerator
   ( CodeGenInput
   , generateCode
-  , _getClasses
   ) where
 
 import Prelude
@@ -22,6 +21,8 @@ type DefaultCodeGenInput =
   , configPath :: String
   }
 
+-- TODO need to generate screens
+
 generateCode :: Aff (Array String)
 generateCode =
   let
@@ -32,9 +33,9 @@ generateCode =
       }
     inputCss = "@tailwind base;\n@tailwind components;\n@tailwind utilities;"
   in
-    fromEffectFnAff $ _getClasses input.configPath inputCss
+    fromEffectFnAff $ _getBaseCssClassNames input.configPath inputCss
 
-foreign import _getClasses
+foreign import _getBaseCssClassNames
   :: String
   -> String
   -> EffectFnAff (Array String)
