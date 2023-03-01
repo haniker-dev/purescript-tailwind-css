@@ -1,4 +1,4 @@
-{ name = "tailwind"
+{ name = "tailwind-css"
 , dependencies =
   [ "aff"
   , "argparse-basic"
@@ -17,7 +17,12 @@
   , "typelevel-prelude"
   ]
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "cli/**/*.purs", "test/**/*.purs" ]
+, sources =
+  [ "src/**/*.purs"
+  , "cli/**/*.purs"
+  , "test/**/*.purs"
+  , "test-generated/**/*.purs"
+  ]
 , license = "MIT"
 , repository = "https://github.com/haniker-dev/purescript-tailwind-css"
 }

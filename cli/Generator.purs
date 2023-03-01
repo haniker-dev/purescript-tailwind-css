@@ -11,11 +11,17 @@ type GeneratedResult =
   , base :: String
   , screen :: String
   , pseudo :: String
-
   }
 
--- TODO need to generate screens
--- TODO need to generate pseudo
+-- TODO Generate tailwind main file and add the css function
+-- css :: ∀ a r i. IsSymbol a => Theme a -> IProp (class :: String | r) i
+-- css a = class_ $ ClassName $ show a
+-- data IntegrationTarget
+--   = NoTarget
+--   | Halogen
+
+-- TODO Generate screens
+-- TODO Generate pseudo
 
 generate :: FilePath -> Aff GeneratedResult
 generate twConfigPath = do
@@ -40,7 +46,7 @@ tailwind =
 import Tailwind.Base
 import Tailwind.Breakpoint
 import Tailwind.Pseudo
-import Data.Theme as Theme """
+import Data.Theme as Theme"""
 
 base :: String
 base =

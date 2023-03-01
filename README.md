@@ -15,18 +15,15 @@ See [class-detection-in-depth](https://tailwindcss.com/docs/content-configuratio
 
 ## Installation Guide
 ```
-spago install tailwindcss
+spago install tailwind-css
 npm install --save-dev tailwindcss purescript-tailwind-css
 ```
 You can choose any way to integrate Tailwind 
 into your development pipeline as per [Tailwind Installation](https://tailwindcss.com/docs/installation).
 
-The only requirement for this package to work is 
-to add your Purescript compiled-JS folder 
-into your `tailwind.config.js`'s `content` (usually `./output/**/*.js`).
+Add Purescript compiled-JS folder (usually `./output/**/*.js`) in `tailwind.config.js`'s `content`
 
-For example: 
-```js
+```javascript
 // tailwind.config.js
 module.exports = { 
   content: ["./output/**/*.js"],
@@ -35,19 +32,23 @@ module.exports = {
 
 ```
 
-*Generate your Tailwind CSS Functions*
+Generate your Tailwind CSS Functions
 
 Run
+
+```bash
+purs-tailwind-css --output ./generated-src [--config ./tailwind.config.js]
+
+--config,-c    Path to tailwind.config.js
+--help,-h      Show this help message.
+--output,-o    Directory for the generated CSS function
 ```
-purs-tailwind-css --output generated-src
-```
+
 Based on your `tailwind.config.js`, this will generate all the following files:
 - `generated-src/Tailwind.purs` (Re-exports all functions in `Tailwind/*.purs`)
 - `generated-src/Tailwind/Base.purs`
 - `generated-src/Tailwind/Screen.purs`
 - `generated-src/Tailwind/Modifer.purs`
-
-See `purs-tailwind-css --help` for more options such as processing a predefined CSS file.
 
 Happy coding!
 

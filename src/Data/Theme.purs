@@ -1,3 +1,6 @@
+-- TODO Are we taking out a valuable namespace Data.Theme? 
+-- Should we just call it as Data.Internal.ThemeClass 
+-- since it is already re-exported by Tailwind.purs
 module Data.Theme
   ( (~)
   , SkipAppendable
