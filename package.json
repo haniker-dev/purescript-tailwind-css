@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "Type-safe CSS with Tailwind",
   "type": "module",
-  "main": "index.js",
   "bin": {
     "purs-tailwind-css": "./purs-tailwind-css.js"
   },

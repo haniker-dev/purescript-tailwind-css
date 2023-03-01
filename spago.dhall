@@ -10,7 +10,7 @@
   , "typelevel-prelude"
   ]
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "test/**/*.purs" ]
+, sources = [ "src/**/*.purs", "cli/**/*.purs", "test/**/*.purs" ]
 , license = "MIT"
 , repository = "https://github.com/haniker-dev/purescript-tailwind-css"
 }
