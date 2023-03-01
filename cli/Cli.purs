@@ -29,21 +29,22 @@ run = parseArgs >>= case _ of
     twConfigPath' <- liftEffect $ Path.resolve [ processDir ] twConfigPath
 
     Console.log "🎬 Generating CSS Functions..."
-    { base, screen, pseudo } <- generate twConfigPath'
+    { tailwind, base, screen, pseudo } <- generate twConfigPath'
 
     let writeFile' = writeFile processDir outputDir
-    _ <- FS.mkdir' outputDir { mode: perm755, recursive: true }
-    _ <- writeFile' "Base.purs" base
-    _ <- writeFile' "Screen.purs" screen
-    _ <- writeFile' "Pseudo.purs" pseudo
+    _ <- FS.mkdir' (Path.concat [ outputDir, "Tailwind" ]) { mode: perm755, recursive: true }
+    _ <- writeFile' [ "Tailwind.purs" ] tailwind
+    _ <- writeFile' [ "Tailwind", "Base.purs" ] base
+    _ <- writeFile' [ "Tailwind", "Screen.purs" ] screen
+    _ <- writeFile' [ "Tailwind", "Pseudo.purs" ] pseudo
 
     Console.log "🏁 Completed"
 
-writeFile :: FilePath -> FilePath -> FilePath -> String -> Aff Unit
-writeFile processDir outputDir fileName s = do
-  fullPath <- liftEffect $ Path.resolve [ processDir, outputDir ] fileName
+writeFile :: FilePath -> FilePath -> Array FilePath -> String -> Aff Unit
+writeFile processDir outputDir filePath s = do
+  fullPath <- liftEffect $ Path.resolve [ processDir, outputDir ] $ Path.concat filePath
   _ <- FS.writeTextFile UTF8 fullPath s
-  Console.log $ "✅ Generated " <> Path.concat [ outputDir, fileName ]
+  Console.log $ "✅ Generated " <> (Path.concat $ [ outputDir ] <> filePath)
 
 perm755 :: Perms
 perm755 = Perm.mkPerms Perm.all Perm.all (Perm.read + Perm.execute)
