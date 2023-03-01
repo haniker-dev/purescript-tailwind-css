@@ -3,6 +3,7 @@
   [ "aff"
   , "console"
   , "effect"
+  , "maybe"
   , "prelude"
   , "spec"
   , "spec-discovery"
