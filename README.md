@@ -16,7 +16,7 @@ See [class-detection-in-depth](https://tailwindcss.com/docs/content-configuratio
 ## Installation Guide
 ```
 spago install tailwindcss
-npm install --save-dev tailwindcss
+npm install --save-dev tailwindcss purescript-tailwind-css
 ```
 You can choose any way to integrate Tailwind 
 into your development pipeline as per [Tailwind Installation](https://tailwindcss.com/docs/installation).
@@ -32,7 +32,24 @@ module.exports = {
   content: ["./output/**/*.js"],
   // … rest of your tailwind.config.js
 }
+
 ```
+
+*Generate your Tailwind CSS Functions*
+
+Run
+```
+purs-tailwind-css --output generated-src
+```
+Based on your `tailwind.config.js`, this will generate all the following files:
+- `generated-src/Tailwind.purs` (Re-exports all functions in `Tailwind/*.purs`)
+- `generated-src/Tailwind/Base.purs`
+- `generated-src/Tailwind/Screen.purs`
+- `generated-src/Tailwind/Modifer.purs`
+
+See `purs-tailwind-css --help` for more options such as processing a predefined CSS file.
+
+Happy coding!
 
 ## TODOs
 

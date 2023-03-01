@@ -37,7 +37,6 @@ export function _getClasses(twConfigPath) {
 }
 
 async function overwriteTWConfig(path) {
-  // @ts-ignore
   const originConfig = await import(join(process.cwd(), path));
 
   return {
