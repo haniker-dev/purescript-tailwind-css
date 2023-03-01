@@ -20,7 +20,7 @@ spec = describe "Generator.Base" do
       r3 `shouldEqual` classes
 
 configPath :: String
-configPath = "./tailwind.config.js"
+configPath = "../../tailwind.config.js"
 
 classes :: Array String
 classes =
