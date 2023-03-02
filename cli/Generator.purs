@@ -9,8 +9,7 @@ import Node.Path (FilePath)
 type GeneratedResult =
   { tailwind :: String
   , base :: String
-  , screen :: String
-  , pseudo :: String
+  , modifiers :: String
   }
 
 -- TODO Generate tailwind main file and add the css function
@@ -29,8 +28,7 @@ generate twConfigPath = do
   pure
     { tailwind: tailwind
     , base: base
-    , screen: screen
-    , pseudo: pseudo
+    , modifiers: modifiers
     }
 
 -- TODO Remove below when done
@@ -38,14 +36,12 @@ tailwind :: String
 tailwind =
   """module Tailwind
   ( module Tailwind.Base
-  , module Tailwind.Breakpoint
-  , module Tailwind.Pseudo
+  , module Tailwind.Modifiers
   , module Tailwind.Tw
   ) where
 
 import Tailwind.Base
-import Tailwind.Breakpoint
-import Tailwind.Pseudo
+import Tailwind.Modifiers
 import Tailwind.Tw"""
 
 base :: String
@@ -150,9 +146,9 @@ text_white_over_70 = Tw
 mt_6 :: Tw "mt-6"
 mt_6 = Tw"""
 
-screen :: String
-screen =
-  """module Tailwind.Breakpoint where
+modifiers :: String
+modifiers =
+  """module Tailwind.Modifiers where
 
 import Tailwind.Tw (class MapPrefix, Tw(..))
 
@@ -168,13 +164,7 @@ lg
    . MapPrefix "lg:" a b
   => Tw a
   -> Tw b
-lg _ = Tw"""
-
-pseudo :: String
-pseudo =
-  """module Tailwind.Pseudo where
-
-import Tailwind.Tw (Tw(..), class MapPrefix)
+lg _ = Tw
 
 hover
   :: ∀ a b

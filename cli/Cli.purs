@@ -29,14 +29,13 @@ run = parseArgs >>= case _ of
     twConfigPath' <- liftEffect $ Path.resolve [ processDir ] twConfigPath
 
     Console.log "🎬 Generating CSS Functions..."
-    { tailwind, base, screen, pseudo } <- generate twConfigPath'
+    { tailwind, base, modifiers } <- generate twConfigPath'
 
     let writeFile' = writeFile processDir outputDir
     _ <- FS.mkdir' (Path.concat [ outputDir, "Tailwind" ]) { mode: perm755, recursive: true }
     _ <- writeFile' [ "Tailwind.purs" ] tailwind
     _ <- writeFile' [ "Tailwind", "Base.purs" ] base
-    _ <- writeFile' [ "Tailwind", "Screen.purs" ] screen
-    _ <- writeFile' [ "Tailwind", "Pseudo.purs" ] pseudo
+    _ <- writeFile' [ "Tailwind", "Modifiers.purs" ] modifiers
 
     Console.log "🏁 Completed"
 

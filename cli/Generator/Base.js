@@ -1,5 +1,4 @@
 // Refer https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
-import { join } from "path";
 import tailwindCss from "tailwindcss";
 import * as postCss from "postcss";
 import * as cssWhat from "css-what";
