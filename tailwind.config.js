@@ -3,7 +3,6 @@ import defaultTheme from "tailwindcss/defaultTheme.js";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [],
-  presets: [],
   darkMode: "media", // or 'class'
   theme: {
     screens: {
