@@ -1,5 +1,6 @@
 // Refer https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 import tailwindCss from "tailwindcss";
+import resolveConfig from "tailwindcss/resolveConfig.js";
 import * as postCss from "postcss";
 import * as cssWhat from "css-what";
 
@@ -20,11 +21,11 @@ import * as cssWhat from "css-what";
  * it use cssWhat as another parser to gather css class name from postcss parsed info
  */
 /** @type {( twConfigPath: string, inputCss: string ) => Promise<string[]>} */
-export function _getBaseCssClassNames(twConfigPath) {
+export function _getBaseCssClassNames(twConfig) {
   return function (inputCss) {
     return async function (onError, onSuccess) {
       // Overwrite TW config
-      const tailwindConfig = await overwriteTWConfig(twConfigPath);
+      const tailwindConfig = await overwriteTWConfig(twConfig);
 
       // Parsed css from TW css using postCss
       const parsedCss = await postCss
@@ -45,12 +46,10 @@ export function _getBaseCssClassNames(twConfigPath) {
   };
 }
 
-/** @type {( path: string ) => Promise<tailwindcss.Config>} */
-async function overwriteTWConfig(path) {
-  const originConfig = await import(path);
-
+/** @type {( config: tailwindcss.Config ) => Promise<tailwindcss.Config>} */
+async function overwriteTWConfig(config) {
   return {
-    ...originConfig,
+    ...config,
     // Don't let TW scan any file by adding invalid path
     // https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/validateConfig.js
     content: ["intentionally.empty"],

@@ -3,6 +3,7 @@ module Test.Generator.Base where
 import Prelude
 
 import Effect.Aff.Compat (fromEffectFnAff)
+import Generator.Config as Config
 import Generator.Base (_getBaseCssClassNames)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -11,9 +12,10 @@ spec :: Spec Unit
 spec = describe "Generator.Base" do
   describe "_getBaseCssClassNames" do
     it "_getBaseCssClassNames classes" do
-      r1 <- fromEffectFnAff $ _getBaseCssClassNames configPath classSelector
-      r2 <- fromEffectFnAff $ _getBaseCssClassNames configPath attributeSelector
-      r3 <- fromEffectFnAff $ _getBaseCssClassNames configPath pseudoSelector
+      c <- Config.loadTwConfig configPath
+      r1 <- fromEffectFnAff $ _getBaseCssClassNames c classSelector
+      r2 <- fromEffectFnAff $ _getBaseCssClassNames c attributeSelector
+      r3 <- fromEffectFnAff $ _getBaseCssClassNames c pseudoSelector
 
       r1 `shouldEqual` classes
       r2 `shouldEqual` classes

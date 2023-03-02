@@ -3,6 +3,7 @@ module Generator (GeneratedResult, generate) where
 import Prelude
 
 import Effect.Aff (Aff)
+import Generator.Config as Config
 import Generator.Base as Base
 import Node.Path (FilePath)
 
@@ -24,7 +25,8 @@ type GeneratedResult =
 
 generate :: FilePath -> Aff GeneratedResult
 generate twConfigPath = do
-  _ <- Base.generate twConfigPath
+  twConfig <- Config.loadTwConfig twConfigPath
+  _ <- Base.generate twConfig
   pure
     { tailwind: tailwind
     , base: base
