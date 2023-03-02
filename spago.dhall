@@ -19,11 +19,7 @@
   ]
 , packages = ./packages.dhall
 , sources =
-  [ "src/**/*.purs"
-  , "cli/**/*.purs"
-  , "test/**/*.purs"
-  , "test-generated/**/*.purs"
-  ]
+  [ "src/**/*.purs", "cli/**/*.purs", "test/**/*.purs", "gen-test/**/*.purs" ]
 , license = "MIT"
 , repository = "https://github.com/haniker-dev/purescript-tailwind-css"
 }

@@ -52,9 +52,18 @@ Based on your `tailwind.config.js`, this will generate all the following files:
 
 Happy coding!
 
-## TODOs
+## Development
+- Use `make run-cli-local` to generate a copy of Tailwind locally at `./gen-local` folder which is git-ignored
+  Be sure to edit your `spago.dhall`'s `sources` to exclude `./gen-test` folder else you will have compiler error
+  Eg. `sources = [ "src/**/*.purs", "cli/**/*.purs", "test/**/*.purs", "gen-local/**/*.purs" ]`
+- Use `make run-cli-test` to generate a copy of Tailwind locally at `./gen-test` folder which is used by test cases
+- See `Makefile` for all available commands to be used for development
 
+## TODOs
 - [ ] Provide CLI 
 - [ ] Hard-coded theme.extend.screens https://tailwindcss.com/docs/screens
 - [ ] Hard-coded pseudo-classes https://tailwindcss.com/docs/hover-focus-and-other-states#quick-reference
-- [ ] *ASSUME* all other parts of Tailwind Config are generated eg. extra colors, spacing, etc
+- [ ] Add test cases for generated custom colors, screens, opacity and spacing
+- [ ] Add Arbitrary functions
+- [ ] Add custom css classes + `Generator.Utility.toFnName` rules
+- [ ] Add CI to generate `gen-test` and it not have any diff

@@ -1,10 +1,10 @@
 module Example where
 
-import Prelude
+import Prelude (Unit, show, ($))
 
 import Effect (Effect)
 import Effect.Console (log)
-import Tailwind (Tw, bg_red, hover, tw, mb_2, mt_4, my_4, sm, (~))
+import Tailwind (bg_red_100, bg_red_500, hover, mb_2, mt_4, my_4, sm, tw, (~))
 
 -- Create a record to hold all your styles
 style
@@ -12,18 +12,17 @@ style
      }
 style =
   { container: tw -- Optional empty classname for nicer code formatting
-
       ~ my_4
       ~ mb_2
       ~ sm -- Easily add breakpoint
           ( tw
               ~ mt_4
-              ~ bg_red
+              ~ bg_red_100
           )
       ~ hover -- Easily add pseduo-classes
           ( tw
               ~ mt_4
-              ~ bg_red
+              ~ bg_red_500
           )
   }
 

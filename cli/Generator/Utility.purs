@@ -10,4 +10,5 @@ toFnName :: String -> String
 toFnName s =
   replaceAll (Pattern "/") (Replacement "_over_") s
     # replaceAll (Pattern "-") (Replacement "_")
+    # replaceAll (Pattern ".") (Replacement "_dot_")
 
