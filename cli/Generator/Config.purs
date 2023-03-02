@@ -1,4 +1,10 @@
-module Generator.Config where
+module Generator.Config
+  ( TwConfig
+  , TwResolvedConfig
+  , loadTwConfig
+  , resolveTwConfig
+  , screenModifiers
+  ) where
 
 import Prelude
 
@@ -16,6 +22,9 @@ loadTwConfig twConfigPath =
 resolveTwConfig :: TwConfig -> TwResolvedConfig
 resolveTwConfig c = _resolveConfig c
 
+screenModifiers :: TwResolvedConfig -> Array String
+screenModifiers rc = _screenModifiers rc
+
 foreign import _loadConfig
   :: FilePath
   -> EffectFnAff TwConfig
@@ -24,3 +33,6 @@ foreign import _resolveConfig
   :: TwConfig
   -> TwResolvedConfig
 
+foreign import _screenModifiers
+  :: TwResolvedConfig
+  -> Array String

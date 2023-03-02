@@ -17,3 +17,8 @@ export function _loadConfig(twConfigPath) {
 export function _resolveConfig(config) {
   return resolveConfig(config);
 }
+
+/** @type {tailwindcss.ResolveConfig => string[]} */
+export function _screenModifiers(resolvedConfig) {
+  return Object.keys(resolvedConfig.theme.screens) || [];
+}
