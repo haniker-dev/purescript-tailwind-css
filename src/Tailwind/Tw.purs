@@ -1,10 +1,7 @@
--- TODO Are we taking out a valuable namespace Data.Theme? 
--- Should we just call it as Data.Internal.ThemeClass 
--- since it is already re-exported by Tailwind.purs
-module Data.Theme
+module Tailwind.Tw
   ( (~)
   , SkipAppendable
-  , Theme(..)
+  , Tw(..)
   , class Appendable
   , class MapPrefix
   , class MapPrefixHelper
@@ -18,11 +15,11 @@ import Data.Symbol (class IsSymbol, reflectSymbol)
 import Type.Data.Symbol (class Append, class Cons) as Symbol
 import Type.Proxy (Proxy(..))
 
-data Theme :: Symbol -> Type
-data Theme a = Theme
+data Tw :: Symbol -> Type
+data Tw a = Tw
 
-instance IsSymbol a => Show (Theme a) where
-  show :: Theme a -> String
+instance IsSymbol a => Show (Tw a) where
+  show :: Tw a -> String
   show _ = reflectSymbol (Proxy :: Proxy a)
 
 type SkipAppendable :: Symbol
@@ -44,10 +41,10 @@ else instance
 merge
   :: forall a b c
    . Appendable a b c
-  => Theme a
-  -> Theme b
-  -> Theme c
-merge _ _ = Theme
+  => Tw a
+  -> Tw b
+  -> Tw c
+merge _ _ = Tw
 
 infixr 5 merge as ~
 
@@ -58,9 +55,9 @@ mapPrefix
   :: ∀ p a b
    . MapPrefix p a b
   => Proxy p
-  -> Theme a
-  -> Theme b
-mapPrefix _ _ = Theme
+  -> Tw a
+  -> Tw b
+mapPrefix _ _ = Tw
 
 class MapPrefix :: Symbol -> Symbol -> Symbol -> Constraint
 class MapPrefix prefix inputLabel outputLabel | prefix inputLabel -> outputLabel

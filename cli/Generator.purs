@@ -14,7 +14,7 @@ type GeneratedResult =
   }
 
 -- TODO Generate tailwind main file and add the css function
--- css :: ∀ a r i. IsSymbol a => Theme a -> IProp (class :: String | r) i
+-- css :: ∀ a r i. IsSymbol a => Tw a -> IProp (class :: String | r) i
 -- css a = class_ $ ClassName $ show a
 -- data IntegrationTarget
 --   = NoTarget
@@ -40,145 +40,145 @@ tailwind =
   ( module Tailwind.Base
   , module Tailwind.Breakpoint
   , module Tailwind.Pseudo
-  , module Theme
+  , module Tailwind.Tw
   ) where
 
 import Tailwind.Base
 import Tailwind.Breakpoint
 import Tailwind.Pseudo
-import Data.Theme as Theme"""
+import Tailwind.Tw"""
 
 base :: String
 base =
   """module Tailwind.Base where
 
-import Data.Theme (Theme(..), SkipAppendable)
+import Tailwind.Tw (Tw(..), SkipAppendable)
 
-_css :: Theme SkipAppendable
-_css = Theme
+tw :: Tw SkipAppendable
+tw = Tw
 
-my_4 :: Theme "my-4"
-my_4 = Theme
+my_4 :: Tw "my-4"
+my_4 = Tw
 
-mb_2 :: Theme "mb-2"
-mb_2 = Theme
+mb_2 :: Tw "mb-2"
+mb_2 = Tw
 
-bg_red :: Theme "bg-red"
-bg_red = Theme
+bg_red :: Tw "bg-red"
+bg_red = Tw
 
-relative :: Theme "relative"
-relative = Theme
+relative :: Tw "relative"
+relative = Tw
 
-isolate :: Theme "isolate"
-isolate = Theme
+isolate :: Tw "isolate"
+isolate = Tw
 
-min_h_full :: Theme "min-h-full"
-min_h_full = Theme
+min_h_full :: Tw "min-h-full"
+min_h_full = Tw
 
-absolute :: Theme "absolute"
-absolute = Theme
+absolute :: Tw "absolute"
+absolute = Tw
 
-inset_0 :: Theme "inset-0"
-inset_0 = Theme
+inset_0 :: Tw "inset-0"
+inset_0 = Tw
 
-_z_10 :: Theme "-z-10"
-_z_10 = Theme
+_z_10 :: Tw "-z-10"
+_z_10 = Tw
 
-h_full :: Theme "h-full"
-h_full = Theme
+h_full :: Tw "h-full"
+h_full = Tw
 
-w_full :: Theme "w-full"
-w_full = Theme
+w_full :: Tw "w-full"
+w_full = Tw
 
-object_cover :: Theme "object-cover"
-object_cover = Theme
+object_cover :: Tw "object-cover"
+object_cover = Tw
 
-object_top :: Theme "object-top"
-object_top = Theme
+object_top :: Tw "object-top"
+object_top = Tw
 
-mx_auto :: Theme "mx-auto"
-mx_auto = Theme
+mx_auto :: Tw "mx-auto"
+mx_auto = Tw
 
-max_w_7xl :: Theme "max-w-7xl"
-max_w_7xl = Theme
+max_w_7xl :: Tw "max-w-7xl"
+max_w_7xl = Tw
 
-px_6 :: Theme "px-6"
-px_6 = Theme
+px_6 :: Tw "px-6"
+px_6 = Tw
 
-py_32 :: Theme "py-32"
-py_32 = Theme
+py_32 :: Tw "py-32"
+py_32 = Tw
 
-text_center :: Theme "text-center"
-text_center = Theme
+text_center :: Tw "text-center"
+text_center = Tw
 
-py_40 :: Theme "py-40"
-py_40 = Theme
+py_40 :: Tw "py-40"
+py_40 = Tw
 
-px_8 :: Theme "px-8"
-px_8 = Theme
+px_8 :: Tw "px-8"
+px_8 = Tw
 
-font_semibold :: Theme "font-semibold"
-font_semibold = Theme
+font_semibold :: Tw "font-semibold"
+font_semibold = Tw
 
-leading_8 :: Theme "leading-8"
-leading_8 = Theme
+leading_8 :: Tw "leading-8"
+leading_8 = Tw
 
-text_3xl :: Theme "text-3xl"
-text_3xl = Theme
+text_3xl :: Tw "text-3xl"
+text_3xl = Tw
 
-font_bold :: Theme "font-bold"
-font_bold = Theme
+font_bold :: Tw "font-bold"
+font_bold = Tw
 
-tracking_tight :: Theme "tracking-tight"
-tracking_tight = Theme
+tracking_tight :: Tw "tracking-tight"
+tracking_tight = Tw
 
-text_white :: Theme "text-white"
-text_white = Theme
+text_white :: Tw "text-white"
+text_white = Tw
 
-text_5xl :: Theme "text-5xl"
-text_5xl = Theme
+text_5xl :: Tw "text-5xl"
+text_5xl = Tw
 
-mt_4 :: Theme "mt-4"
-mt_4 = Theme
+mt_4 :: Tw "mt-4"
+mt_4 = Tw
 
-text_base :: Theme "text-base"
-text_base = Theme
+text_base :: Tw "text-base"
+text_base = Tw
 
-text_white_over_70 :: Theme "text-white-over-70"
-text_white_over_70 = Theme
+text_white_over_70 :: Tw "text-white-over-70"
+text_white_over_70 = Tw
 
-mt_6 :: Theme "mt-6"
-mt_6 = Theme"""
+mt_6 :: Tw "mt-6"
+mt_6 = Tw"""
 
 screen :: String
 screen =
   """module Tailwind.Breakpoint where
 
-import Data.Theme (class MapPrefix, Theme(..))
+import Tailwind.Tw (class MapPrefix, Tw(..))
 
 sm
   :: ∀ a b
    . MapPrefix "sm:" a b
-  => Theme a
-  -> Theme b
-sm _ = Theme
+  => Tw a
+  -> Tw b
+sm _ = Tw
 
 lg
   :: ∀ a b
    . MapPrefix "lg:" a b
-  => Theme a
-  -> Theme b
-lg _ = Theme"""
+  => Tw a
+  -> Tw b
+lg _ = Tw"""
 
 pseudo :: String
 pseudo =
   """module Tailwind.Pseudo where
 
-import Data.Theme (Theme(..), class MapPrefix)
+import Tailwind.Tw (Tw(..), class MapPrefix)
 
 hover
   :: ∀ a b
    . MapPrefix "hover:" a b
-  => Theme a
-  -> Theme b
-hover _ = Theme"""
+  => Tw a
+  -> Tw b
+hover _ = Tw"""
