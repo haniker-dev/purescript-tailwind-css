@@ -15,6 +15,7 @@
   , "spec"
   , "spec-discovery"
   , "strings"
+  , "tuples"
   , "typelevel-prelude"
   ]
 , packages = ./packages.dhall

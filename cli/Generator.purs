@@ -2,14 +2,15 @@ module Generator (GeneratedResult, generate) where
 
 import Prelude
 
+import Data.Tuple (Tuple)
 import Effect.Aff (Aff)
-import Generator.Config as Config
 import Generator.Base as Base
+import Generator.Config as Config
 import Node.Path (FilePath)
 
 type GeneratedResult =
   { tailwind :: String
-  , base :: String
+  , base :: Tuple String String
   , modifiers :: String
   }
 

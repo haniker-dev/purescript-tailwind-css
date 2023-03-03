@@ -11,7 +11,7 @@ spec :: Spec Unit
 spec = describe "Tailwind.Base" do
   describe "Generated Functions" do
     it "tw" do
-      show TW.tw `shouldEqual` show (Tw :: Tw SkipAppendable)
+      show TW.funs.tw `shouldEqual` show (Tw :: Tw SkipAppendable)
 
     it "mt_4" do
-      show TW.mt_4 `shouldEqual` "mt-4"
+      show TW.funs.mt_4 `shouldEqual` "mt-4"

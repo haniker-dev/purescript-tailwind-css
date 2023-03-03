@@ -5,6 +5,7 @@ import Prelude
 import ArgParse.Basic as Arg
 import Data.Array as Array
 import Data.Either (Either(..))
+import Data.Tuple as Tuple
 import Effect (Effect)
 import Effect.Aff (Aff, launchAff_)
 import Effect.Class (liftEffect)
@@ -34,7 +35,8 @@ run = parseArgs >>= case _ of
     let writeFile' = writeFile processDir outputDir
     _ <- FS.mkdir' (Path.concat [ outputDir, "Tailwind" ]) { mode: perm755, recursive: true }
     _ <- writeFile' [ "Tailwind.purs" ] tailwind
-    _ <- writeFile' [ "Tailwind", "Base.purs" ] base
+    _ <- writeFile' [ "Tailwind", "Base.purs" ] $ Tuple.fst base
+    _ <- writeFile' [ "Tailwind", "Base.js" ] $ Tuple.snd base
     _ <- writeFile' [ "Tailwind", "Modifiers.purs" ] modifiers
 
     Console.log "🏁 Completed"

@@ -5,34 +5,46 @@ module Generator.Base
 
 import Prelude
 
-import Data.Array (concat)
 import Data.String (joinWith)
+import Data.Tuple (Tuple(..))
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 import Generator.Config (TwConfig)
 import Generator.Utility (toFnName)
 
-generate :: TwConfig -> Aff String
+generate :: TwConfig -> Aff (Tuple String String)
 generate c =
   do
     classNames <- fromEffectFnAff $ _getBaseCssClassNames c "@tailwind base;\n@tailwind components;\n@tailwind utilities;"
-    pure $ file classNames
+    pure $ Tuple (psFile classNames) (jsFile)
 
-file :: Array String -> String
-file classNames =
+psFile :: Array String -> String
+psFile classNames =
   joinWith "\n" $
     [ "module Tailwind.Base where"
     , "import Tailwind.Tw (Tw(..), SkipAppendable)"
-    , "tw :: Tw SkipAppendable"
-    , "tw = Tw"
+    , "type Funs ="
+    , """  { tw :: Tw SkipAppendable"""
     ]
-      <> (concat $ toFn <$> classNames)
+      <> (toPsLine <$> classNames)
+      <>
+        [ """  }"""
+        , "funs :: Funs"
+        , "funs = _funs"
+        , "foreign import _funs :: Funs"
+        ]
 
-toFn :: String -> Array String
-toFn s =
-  [ fnName <> " :: Tw \"" <> s <> "\""
-  , fnName <> " = Tw"
-  ]
+jsFile :: String
+jsFile =
+  joinWith "\n" $
+    [ "export function _funs() {"
+    , "return {};"
+    , "}"
+    ]
+
+toPsLine :: String -> String
+toPsLine s =
+  """  , """ <> fnName <> " :: Tw \"" <> s <> "\""
   where
   fnName = toFnName s
 
@@ -41,4 +53,3 @@ foreign import _getBaseCssClassNames
   :: TwConfig
   -> String
   -> EffectFnAff (Array String)
-
