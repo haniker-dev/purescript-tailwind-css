@@ -69,12 +69,10 @@ _generate baseClassNames resolvedConfig =
       <> (concat $ toBaseFn <$> baseClassNames)
 
       -- screen functions
-      <> (concat $ toScreenModifierFn <$> Config.screenModifiers resolvedConfig)
-      <>
-        -- modifier functions
-        [ "hover :: ∀ a b . MapPrefix \"hover:\" a b => Tw a -> Tw b"
-        , "hover _ = Tw"
-        ]
+      <> (concat $ toModifierFn <$> Config.screenModifiers resolvedConfig)
+
+      -- modifier functions
+      <> (concat $ toModifierFn <$> modifierClassNames)
 
 toBaseFn :: String -> Array String
 toBaseFn s =
@@ -84,10 +82,88 @@ toBaseFn s =
   where
   fnName = toFnName s
 
-toScreenModifierFn :: String -> Array String
-toScreenModifierFn s =
-  [ fnName <> " :: ∀ a b . MapPrefix \"" <> s <> ":\" a b => Tw a -> Tw b"
-  , fnName <> " = Tw"
+toModifierFn :: String -> Array String
+toModifierFn s =
+  [ fnName <> " :: ∀ a b . MapPrefix \"" <> s <> ":\" a b => Tw a -> Tw b "
+  , fnName <> " _ = Tw"
   ]
   where
   fnName = toFnName s
+
+{-
+  This modifierClassNames was gotten from https://tailwindcss.com/docs/hover-focus-and-other-states#quick-reference
+  This modifierClassNames ignore below classes because it was handled by Config.screenModifiers 
+  "sm" , "md" , "lg" , "xl" , "2xl"
+  This modifierClassNames ignore below classes because it was handled by arbitrary classes
+  min-[…] max-[…] supports-[…] aria-[…] data-[…]
+-}
+{-
+  TODO: 
+    Remember to add below class names back to modifier after complete arbitrary
+    Currently, we ignore those class names min-[…] max-[…] supports-[…] aria-[…] data-[…]
+-}
+modifierClassNames :: Array String
+modifierClassNames =
+  [ "hover"
+  , "focus"
+  , "focus-within"
+  , "focus-visible"
+  , "active"
+  , "visited"
+  , "target"
+  , "first"
+  , "last"
+  , "only"
+  , "odd"
+  , "even"
+  , "first-of-type"
+  , "last-of-type"
+  , "only-of-type"
+  , "empty"
+  , "disabled"
+  , "enabled"
+  , "checked"
+  , "indeterminate"
+  , "default"
+  , "required"
+  , "valid"
+  , "invalid"
+  , "in-range"
+  , "out-of-range"
+  , "placeholder-shown"
+  , "autofill"
+  , "read-only"
+  , "before"
+  , "after"
+  , "first-letter"
+  , "first-line"
+  , "marker"
+  , "selection"
+  , "file"
+  , "backdrop"
+  , "placeholder"
+  , "max-sm"
+  , "max-md"
+  , "max-lg"
+  , "max-xl"
+  , "max-2xl"
+  , "dark"
+  , "portrait"
+  , "landscape"
+  , "motion-safe"
+  , "motion-reduce"
+  , "contrast-more"
+  , "contrast-less"
+  , "print"
+  , "aria-checked"
+  , "aria-disabled"
+  , "aria-expanded"
+  , "aria-hidden"
+  , "aria-pressed"
+  , "aria-readonly"
+  , "aria-required"
+  , "aria-selected"
+  , "rtl"
+  , "ltr"
+  , "open"
+  ]

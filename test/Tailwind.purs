@@ -2,7 +2,7 @@ module Test.Tailwind where
 
 import Prelude
 
-import Tailwind (Tw(..), mt_4, tw)
+import Tailwind (Tw(..), hover, mt_4, sm, tw)
 import Tailwind.Class.Appendable (SkipAppendable)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -15,3 +15,9 @@ spec = describe "Tailwind" do
 
     it "mt_4" do
       show mt_4 `shouldEqual` "mt-4"
+
+    it "hover" do
+      show (hover mt_4) `shouldEqual` "hover:mt-4"
+
+    it "sm" do
+      show (sm mt_4) `shouldEqual` "sm:mt-4"
