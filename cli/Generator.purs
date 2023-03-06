@@ -2,11 +2,12 @@ module Generator (generate) where
 
 import Prelude
 
-import Effect.Aff (Aff)
 import Data.Array (concat)
 import Data.String (joinWith)
-import Generator.Config as Config
+import Effect.Aff (Aff)
 import Generator.Base as Base
+import Generator.Config (TwResolvedConfig)
+import Generator.Config as Config
 import Generator.Utility (toFnName)
 import Node.Path (FilePath)
 
@@ -23,8 +24,9 @@ import Node.Path (FilePath)
 generate :: FilePath -> Aff String
 generate twConfigPath = do
   twConfig <- Config.loadTwConfig twConfigPath
+  let resolvedTwConfig = Config.resolveTwConfig twConfig
   classes <- Base.classNames twConfig
-  pure $ _generate classes
+  pure $ _generate classes resolvedTwConfig
 
 {-
   Note: 
@@ -33,8 +35,8 @@ generate twConfigPath = do
   Purescript compiler (as of version 0.15.7) is slow in compiling and inferring on hover in IDE, etc.
   Hence, we generate a single large file as the output.
 -}
-_generate :: Array String -> String
-_generate baseClassNames =
+_generate :: Array String -> TwResolvedConfig -> String
+_generate baseClassNames resolvedConfig =
   joinWith "\n" $
     [ "module Tailwind where"
 
@@ -64,23 +66,27 @@ _generate baseClassNames =
     , "tw = Tw"
     ]
       -- base functions
-      <> (concat $ toFn <$> baseClassNames)
-      <>
-        -- screen functions
-        [ "sm :: ∀ a b . MapPrefix \"sm:\" a b => Tw a -> Tw b"
-        , "sm _ = Tw"
-        , "lg :: ∀ a b . MapPrefix \"lg:\" a b => Tw a -> Tw b"
-        , "lg _ = Tw"
-        ]
+      <> (concat $ toBaseFn <$> baseClassNames)
+
+      -- screen functions
+      <> (concat $ toScreenModifierFn <$> Config.screenModifiers resolvedConfig)
       <>
         -- modifier functions
         [ "hover :: ∀ a b . MapPrefix \"hover:\" a b => Tw a -> Tw b"
         , "hover _ = Tw"
         ]
 
-toFn :: String -> Array String
-toFn s =
+toBaseFn :: String -> Array String
+toBaseFn s =
   [ fnName <> " :: Tw \"" <> s <> "\""
+  , fnName <> " = Tw"
+  ]
+  where
+  fnName = toFnName s
+
+toScreenModifierFn :: String -> Array String
+toScreenModifierFn s =
+  [ fnName <> " :: ∀ a b . MapPrefix \"" <> s <> ":\" a b => Tw a -> Tw b"
   , fnName <> " = Tw"
   ]
   where
