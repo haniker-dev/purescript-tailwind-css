@@ -21,6 +21,7 @@ spec = describe "Generator.Base" do
       r2 `shouldEqual` classes
       r3 `shouldEqual` classes
 
+-- TODO Extract this to test/tailwind.config.test.js
 configPath :: String
 configPath = "../../tailwind.config.js"
 

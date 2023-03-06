@@ -18,6 +18,8 @@ import Type.Proxy (Proxy(..))
 data Tw :: Symbol -> Type
 data Tw a = Tw
 
+type T2 a = Tw a
+
 instance IsSymbol a => Show (Tw a) where
   show :: Tw a -> String
   show _ = reflectSymbol (Proxy :: Proxy a)
