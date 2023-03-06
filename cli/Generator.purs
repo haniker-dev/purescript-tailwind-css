@@ -26,19 +26,40 @@ generate twConfigPath = do
   classes <- Base.classNames twConfig
   pure $ _generate classes
 
+{-
+  Note: 
+  When we generate multiple large files and re-export in a single file
+  or when we re-export using `module Tailwind (module Something...) where`,
+  Purescript compiler (as of version 0.15.7) is slow in compiling and inferring on hover in IDE, etc.
+  Hence, we generate a single large file as the output.
+-}
 _generate :: Array String -> String
 _generate baseClassNames =
   joinWith "\n" $
     [ "module Tailwind where"
+
     -- Imports
-    , "import Tailwind.Tw"
-    , "import Tailwind.Tw as Export"
+    , "import Data.Show (class Show)"
+    , "import Data.Symbol (class IsSymbol, reflectSymbol)"
+    , "import Type.Prelude (Proxy(..))"
+    , "import Tailwind.Class.Appendable (SkipAppendable, class Appendable)"
+    , "import Tailwind.Class.MapPrefix (class MapPrefix)"
 
-    -- Re-export type and operator
-    , "type Tw a = Export.Tw a"
-    , "infixr 5 Export.merge as ~"
+    -- Type Tw
+    , "data Tw :: Symbol -> Type"
+    , "data Tw a = Tw"
 
-    -- function tw
+    -- Tw Show Instance
+    , "instance IsSymbol a => Show (Tw a) where"
+    , "  show :: Tw a -> String"
+    , "  show _ = reflectSymbol (Proxy :: Proxy a)"
+
+    -- Merge Tw types
+    , "merge :: forall a b c. Appendable a b c => Tw a -> Tw b -> Tw c"
+    , "merge _ _ = Tw"
+    , "infixr 5 merge as ~"
+
+    -- Sugar-syntax tw
     , "tw :: Tw SkipAppendable"
     , "tw = Tw"
     ]

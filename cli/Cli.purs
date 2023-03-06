@@ -6,7 +6,7 @@ import ArgParse.Basic as Arg
 import Data.Array as Array
 import Data.Either (Either(..))
 import Effect (Effect)
-import Effect.Aff (launchAff_)
+import Effect.Aff (Aff, launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
 import Generator (generate)
@@ -25,17 +25,37 @@ run = parseArgs >>= case _ of
 
   Right options -> launchAff_ do
     { twConfigPath, outputDir } <- pure $ options
-    processDir <- liftEffect $ Process.cwd
-    twConfigPath' <- liftEffect $ Path.resolve [ processDir ] twConfigPath
+    resolvedPath <- resolvePath { twConfig: twConfigPath, genDir: outputDir }
 
-    Console.log "🎬 Generating CSS Functions..."
-    genCode <- generate twConfigPath'
-    let relativeFilePath = Path.concat [ outputDir, "Tailwind.purs" ]
-    fullPath <- liftEffect $ Path.resolve [ processDir ] relativeFilePath
-    _ <- FS.writeTextFile UTF8 fullPath genCode
-    Console.log $ " ✅ Generated " <> relativeFilePath
+    Console.log $ "🗂 Creating output directory " <> resolvedPath.genDir.relative
+    _ <- FS.mkdir' resolvedPath.genDir.absolute { mode: perm755, recursive: true }
 
-    Console.log " 🏁 Completed "
+    Console.log "🎬 Generating CSS Functions"
+    genCode <- generate resolvedPath.twConfig.absolute
+    _ <- FS.writeTextFile UTF8 resolvedPath.genFile.absolute genCode
+    Console.log $ "✅ Generated " <> resolvedPath.genFile.relative
+
+    Console.log "🏁 Completed "
+
+type ResolvedPath =
+  { twConfig :: { absolute :: String, relative :: String }
+  , genDir :: { absolute :: String, relative :: String }
+  , genFile :: { absolute :: String, relative :: String }
+  }
+
+resolvePath :: { twConfig :: FilePath, genDir :: FilePath } -> Aff ResolvedPath
+resolvePath { twConfig, genDir } = do
+  processDir <- liftEffect $ Process.cwd
+  twConfig' <- liftEffect $ Path.resolve [ processDir ] twConfig
+  let genDir' = Path.concat [ processDir, genDir ]
+  let genFile = Path.concat [ genDir, "Tailwind.purs" ]
+  genFile' <- liftEffect $ Path.resolve [ processDir ] genFile
+
+  pure
+    { twConfig: { absolute: twConfig', relative: twConfig }
+    , genDir: { absolute: genDir', relative: genDir }
+    , genFile: { absolute: genFile', relative: genFile }
+    }
 
 perm755 :: Perms
 perm755 = Perm.mkPerms Perm.all Perm.all (Perm.read + Perm.execute)
