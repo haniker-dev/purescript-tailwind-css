@@ -39,9 +39,10 @@ Run
 ```bash
 purs-tailwind-css --output ./generated-src [--config ./tailwind.config.js]
 
---config,-c    Path to tailwind.config.js
---help,-h      Show this help message.
---output,-o    Directory for the generated CSS function
+--config,-c         Path to tailwind.config.js
+--help,-h           Show this help message.
+--module-name,-n    Module name for the generated CSS function
+--output,-o         Directory for the generated CSS function
 ```
 
 Based on your `tailwind.config.js`, this will generate all the following files:
@@ -65,6 +66,4 @@ Happy coding!
 - [ ] Add test cases for generated custom opacity 
 - [ ] Add test cases for generated custom spacing
 - [ ] Add test cases for generated custom CSS classes (Feature)
-- [ ] Add `Generator.Utility.toFnName` rules
-- [ ] Add Arbitrary receipe in README ie. `arbitraryTop :: Tw "top-[40px]"`
 - [ ] Add CI to generate `gen-test` and it should not have any diff
