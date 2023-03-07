@@ -60,10 +60,11 @@ Happy coding!
 - See `Makefile` for all available commands to be used for development
 
 ## TODOs
-- [ ] Provide CLI 
-- [ ] Hard-coded theme.extend.screens https://tailwindcss.com/docs/screens
-- [ ] Hard-coded pseudo-classes https://tailwindcss.com/docs/hover-focus-and-other-states#quick-reference
-- [ ] Add test cases for generated custom colors, screens, opacity and spacing
-- [ ] Add Arbitrary functions
-- [ ] Add custom css classes + `Generator.Utility.toFnName` rules
-- [ ] Add CI to generate `gen-test` and it not have any diff
+- [ ] Add test cases for generated custom colors
+- [ ] Add test cases for generated custom screens
+- [ ] Add test cases for generated custom opacity 
+- [ ] Add test cases for generated custom spacing
+- [ ] Add test cases for generated custom CSS classes
+- [ ] Add `Generator.Utility.toFnName` rules
+- [ ] Add Arbitrary receipe in README ie. `arbitraryTop :: Tw "top-[40px]"`
+- [ ] Add CI to generate `gen-test` and it should not have any diff
