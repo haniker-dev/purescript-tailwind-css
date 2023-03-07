@@ -2,9 +2,13 @@ module Test.Generator.Base where
 
 import Prelude
 
+import Effect (Effect)
 import Effect.Aff.Compat (fromEffectFnAff)
-import Generator.Config as Config
+import Effect.Class (liftEffect)
 import Generator.Base (_getBaseCssClassNames)
+import Generator.Config as Config
+import Node.Path as Path
+import Node.Process as Process
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 
@@ -12,7 +16,7 @@ spec :: Spec Unit
 spec = describe "Generator.Base" do
   describe "_getBaseCssClassNames" do
     it "_getBaseCssClassNames classes" do
-      c <- Config.loadTwConfig configPath
+      c <- Config.loadTwConfig =<< liftEffect configPath
       r1 <- fromEffectFnAff $ _getBaseCssClassNames c classSelector
       r2 <- fromEffectFnAff $ _getBaseCssClassNames c attributeSelector
       r3 <- fromEffectFnAff $ _getBaseCssClassNames c pseudoSelector
@@ -21,9 +25,10 @@ spec = describe "Generator.Base" do
       r2 `shouldEqual` classes
       r3 `shouldEqual` classes
 
--- TODO Extract this to test/tailwind.config.test.js
-configPath :: String
-configPath = "../../tailwind.config.js"
+configPath :: Effect String
+configPath = do
+  processDir <- Process.cwd
+  Path.resolve [ processDir ] "./test/tailwind.config.js"
 
 classes :: Array String
 classes =

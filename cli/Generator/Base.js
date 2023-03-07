@@ -20,7 +20,7 @@ import * as cssWhat from "css-what";
  * it use postCss to parse css from TW generation
  * it use cssWhat as another parser to gather css class name from postcss parsed info
  */
-/** @type {( twConfigPath: string, inputCss: string ) => Promise<string[]>} */
+/** @type {( twConfig: tailwindcss.Config, inputCss: string ) => Promise<string[]>} */
 export function _getBaseCssClassNames(twConfig) {
   return function (inputCss) {
     return async function (onError, onSuccess) {
