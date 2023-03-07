@@ -64,7 +64,7 @@ Happy coding!
 - [ ] Add test cases for generated custom screens
 - [ ] Add test cases for generated custom opacity 
 - [ ] Add test cases for generated custom spacing
-- [ ] Add test cases for generated custom CSS classes
+- [ ] Add test cases for generated custom CSS classes (Feature)
 - [ ] Add `Generator.Utility.toFnName` rules
 - [ ] Add Arbitrary receipe in README ie. `arbitraryTop :: Tw "top-[40px]"`
 - [ ] Add CI to generate `gen-test` and it should not have any diff
