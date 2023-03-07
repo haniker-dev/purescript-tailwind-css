@@ -24,16 +24,15 @@ run = parseArgs >>= case _ of
     Console.error $ Arg.printArgError err
 
   Right options -> launchAff_ do
-    { twConfigPath, outputDir } <- pure $ options
-    resolvedPath <- resolvePath { twConfig: twConfigPath, genDir: outputDir }
+    { genDir, genFile, twConfig } <- resolvePath options
 
-    Console.log $ "🗂 Creating output directory " <> resolvedPath.genDir.relative
-    _ <- FS.mkdir' resolvedPath.genDir.absolute { mode: perm755, recursive: true }
+    Console.log $ "🗂 Creating output directory " <> genDir.relative
+    _ <- FS.mkdir' genDir.absolute { mode: perm755, recursive: true }
 
     Console.log "🎬 Generating CSS Functions"
-    genCode <- generate resolvedPath.twConfig.absolute
-    _ <- FS.writeTextFile UTF8 resolvedPath.genFile.absolute genCode
-    Console.log $ "✅ Generated " <> resolvedPath.genFile.relative
+    genCode <- generate { moduleName: options.moduleName, twConfigPath: twConfig.absolute }
+    _ <- FS.writeTextFile UTF8 genFile.absolute genCode
+    Console.log $ "✅ Generated " <> genFile.relative
 
     Console.log "🏁 Completed "
 
@@ -43,12 +42,12 @@ type ResolvedPath =
   , genFile :: { absolute :: String, relative :: String }
   }
 
-resolvePath :: { twConfig :: FilePath, genDir :: FilePath } -> Aff ResolvedPath
-resolvePath { twConfig, genDir } = do
+resolvePath :: Options -> Aff ResolvedPath
+resolvePath { moduleName, twConfigPath: twConfig, outputDir: genDir } = do
   processDir <- liftEffect $ Process.cwd
   twConfig' <- liftEffect $ Path.resolve [ processDir ] twConfig
   let genDir' = Path.concat [ processDir, genDir ]
-  let genFile = Path.concat [ genDir, "Tailwind.purs" ]
+  let genFile = Path.concat [ genDir, moduleName <> ".purs" ]
   genFile' <- liftEffect $ Path.resolve [ processDir ] genFile
 
   pure
@@ -70,7 +69,8 @@ parseArgs = do
     args
 
 type Options =
-  { twConfigPath :: FilePath
+  { moduleName :: String
+  , twConfigPath :: FilePath
   , outputDir :: FilePath
   }
 
@@ -82,6 +82,8 @@ argParser =
     , twConfigPath:
         Arg.argument [ "--config", "-c" ] "Path to tailwind.config.js"
           # Arg.default "./tailwind.config.js"
-
+    , moduleName:
+        Arg.argument [ "--module-name", "-n" ] "Module name for the generated CSS function"
+          # Arg.default "Tailwind"
     }
     <* Arg.flagHelp

@@ -18,7 +18,7 @@ run-test: ## Run test locally
 	spago test
 
 run-cli-test: ## Run cli to ./gen-test folder
-	./cli/purs-tailwind-css-dev.js --config ./tailwind.config.js --output ./gen-test
+	./cli/purs-tailwind-css-dev.js --config ./tailwind.config.js --output ./gen-test --module-name Tailwind
 
 run-cli-local: ## Run cli to ./gen-local folder
 	./cli/purs-tailwind-css-dev.js --config ./tailwind.config.js --output ./gen-local

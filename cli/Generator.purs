@@ -18,15 +18,17 @@ import Node.Path (FilePath)
 --   = NoTarget
 --   | Halogen
 
--- TODO Generate screens
--- TODO Generate pseudo
+type Input =
+  { moduleName :: String
+  , twConfigPath :: FilePath
+  }
 
-generate :: FilePath -> Aff String
-generate twConfigPath = do
+generate :: Input -> Aff String
+generate { moduleName, twConfigPath } = do
   twConfig <- Config.loadTwConfig twConfigPath
   let resolvedTwConfig = Config.resolveTwConfig twConfig
   classes <- Base.classNames twConfig
-  pure $ _generate classes resolvedTwConfig
+  pure $ _generate moduleName classes resolvedTwConfig
 
 {-
   Note: 
@@ -35,10 +37,10 @@ generate twConfigPath = do
   Purescript compiler (as of version 0.15.7) is slow in compiling and inferring on hover in IDE, etc.
   Hence, we generate a single large file as the output.
 -}
-_generate :: Array String -> TwResolvedConfig -> String
-_generate baseClassNames resolvedConfig =
+_generate :: String -> Array String -> TwResolvedConfig -> String
+_generate moduleName baseClassNames resolvedConfig =
   joinWith "\n" $
-    [ "module Tailwind where"
+    [ "module " <> moduleName <> " where"
 
     -- Imports
     , "import Data.Show (class Show)"
