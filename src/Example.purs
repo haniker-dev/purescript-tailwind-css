@@ -11,6 +11,7 @@ import Tailwind.Class.MapPrefix (class MapPrefix)
 style
   :: {
        -- Compiler can infer the correct combined CSS classes at compile time
+       -- Tw "my-4 -mt-4 px-0.5 w-4/5 sm:mt-4 sm:bg-red-100 hover:mt-4 hover:bg-red-500 hover:p-[5px] [&:nth-child(3)]:mt-8"
        container :: _
      }
 style =
