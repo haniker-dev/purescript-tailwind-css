@@ -6,6 +6,8 @@
   , "console"
   , "effect"
   , "either"
+  , "integers"
+  , "maybe"
   , "node-buffer"
   , "node-fs"
   , "node-fs-aff"

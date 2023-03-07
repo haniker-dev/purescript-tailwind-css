@@ -11,7 +11,7 @@ import Tailwind.Class.MapPrefix (class MapPrefix)
 style
   :: {
        -- Compiler can infer the correct combined CSS classes at compile time
-       -- Tw "my-4 -mt-4 px-0.5 w-4/5 sm:mt-4 sm:bg-red-100 hover:mt-4 hover:bg-red-500 hover:p-[5px] [&:nth-child(3)]:mt-8"
+       -- Tw "my-4 -mt-4 px-0.5 w-4/5 sm:mt-4 sm:bg-red-100 hover:mt-4 hover:bg-red-500 hover:p-[5px] [&:nth-child(3)]:mt-8 2xl:mt-10"
        container :: _
      }
 style =
@@ -35,6 +35,10 @@ style =
       ~ arbitraryVariants -- Define and use your own arbitrary variant
           ( tw
               ~ mt_8
+          )
+      ~ _2xl -- names starting with number is prefixed with an underscore
+          ( tw
+              ~ mt_10
           )
   }
 
