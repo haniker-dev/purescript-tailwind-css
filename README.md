@@ -117,9 +117,6 @@ Happy coding!
 - See `Makefile` for all available commands to be used for development
 
 ## TODOs
-- [ ] Add test cases for generated custom colors
-- [ ] Add test cases for generated custom screens
-- [ ] Add test cases for generated custom opacity 
-- [ ] Add test cases for generated custom spacing
-- [ ] Add test cases for generated custom CSS classes (Feature)
+- [ ] (Feature) Allow `input` css with custom CSS classes + test cases
+- [ ] Add integration to Halogen
 - [ ] Add CI to generate `gen-test` and it should not have any diff
