@@ -2,17 +2,18 @@ module Example where
 
 import Tailwind
 
-import Effect (Effect)
-import Effect.Console (log)
-import Prelude (Unit, show, ($))
 import Tailwind.Class.MapPrefix (class MapPrefix)
+
+-- TODO Make this example a Halogen Example
 
 -- Create a record to hold all your styles
 style
   :: {
        -- Compiler can infer the correct combined CSS classes at compile time
        -- Tw "my-4 -mt-4 px-0.5 w-4/5 sm:mt-4 sm:bg-red-100 hover:mt-4 hover:bg-red-500 hover:p-[5px] [&:nth-child(3)]:mt-8 2xl:mt-10"
-       container :: _
+       -- TODO Replace below with type hole when pasting into README
+       container :: Tw "my-4 -mt-4 px-0.5 w-4/5 sm:mt-4 sm:bg-red-100 hover:mt-4 hover:bg-red-500 hover:p-[5px] [&:nth-child(3)]:mt-8 2xl:mt-10"
+
      }
 style =
   { container: tw -- Optional empty classname for nicer code formatting
@@ -47,9 +48,4 @@ arbitraryPadding = Tw
 
 arbitraryVariants :: ∀ a b. MapPrefix "[&:nth-child(3)]:" a b => Tw a -> Tw b
 arbitraryVariants _ = Tw
-
-example :: Effect Unit
-example = do
-  -- In the compiled-JS, it will only have a single string of "my-4 mb-2 sm:mt-4 sm:bg-red" which is easy for tailwindcss to scan for
-  log $ show $ style.container
 

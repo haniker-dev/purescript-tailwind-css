@@ -6,6 +6,7 @@
   , "console"
   , "effect"
   , "either"
+  , "halogen"
   , "integers"
   , "maybe"
   , "node-buffer"

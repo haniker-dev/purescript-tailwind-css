@@ -11,9 +11,7 @@ import Generator.Config as Config
 import Generator.Utility (toFnName)
 import Node.Path (FilePath)
 
--- TODO Generate tailwind main file and add the css function
--- css :: ∀ a r i. IsSymbol a => Tw a -> IProp (class :: String | r) i
--- css a = class_ $ ClassName $ show a
+-- TODO Link back to cli for Halogen or no integration
 -- data IntegrationTarget
 --   = NoTarget
 --   | Halogen
@@ -43,20 +41,19 @@ _generate moduleName baseClassNames resolvedConfig =
     [ "module " <> moduleName <> " where"
 
     -- Imports
-    , "import Data.Show (class Show)"
-    , "import Data.Symbol (class IsSymbol, reflectSymbol)"
-    , "import Type.Prelude (Proxy(..))"
     , "import Tailwind.Class.Appendable (SkipAppendable, class Appendable)"
     , "import Tailwind.Class.MapPrefix (class MapPrefix)"
+
+    -- Halogen integration
+    , "import Data.Symbol (class IsSymbol)"
+    , "import Halogen.HTML (IProp)"
+    , "import Tailwind.Halogen as H"
+    , "css :: ∀ tw a r i. IsSymbol a => tw a -> IProp (class :: String | r) i"
+    , "css = H.css"
 
     -- Type Tw
     , "data Tw :: Symbol -> Type"
     , "data Tw a = Tw"
-
-    -- Tw Show Instance
-    , "instance IsSymbol a => Show (Tw a) where"
-    , "  show :: Tw a -> String"
-    , "  show _ = reflectSymbol (Proxy :: Proxy a)"
 
     -- Merge Tw types
     , "merge :: forall a b c. Appendable a b c => Tw a -> Tw b -> Tw c"
