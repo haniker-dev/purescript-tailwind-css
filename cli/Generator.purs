@@ -3,6 +3,7 @@ module Generator (generate) where
 import Prelude
 
 import Data.Array (concat)
+import Data.Maybe (Maybe)
 import Data.String (joinWith)
 import Effect.Aff (Aff)
 import Generator.Base as Base
@@ -19,13 +20,14 @@ import Node.Path (FilePath)
 type Input =
   { moduleName :: String
   , twConfigPath :: FilePath
+  , twInputCssPath :: Maybe FilePath
   }
 
 generate :: Input -> Aff String
-generate { moduleName, twConfigPath } = do
+generate { moduleName, twConfigPath, twInputCssPath } = do
   twConfig <- Config.loadTwConfig twConfigPath
   let resolvedTwConfig = Config.resolveTwConfig twConfig
-  classes <- Base.classNames twConfig
+  classes <- Base.classNames twConfig twInputCssPath
   pure $ _generate moduleName classes resolvedTwConfig
 
 {-

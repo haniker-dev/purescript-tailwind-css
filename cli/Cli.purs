@@ -5,8 +5,9 @@ import Prelude
 import ArgParse.Basic as Arg
 import Data.Array as Array
 import Data.Either (Either(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Effect (Effect)
-import Effect.Aff (Aff, launchAff_)
+import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
 import Generator (generate)
@@ -24,34 +25,48 @@ run = parseArgs >>= case _ of
     Console.error $ Arg.printArgError err
 
   Right options -> launchAff_ do
-    { genDir, genFile, twConfig } <- resolvePath options
+    { genDir, genFile, twConfig, twInputCss } <- liftEffect $ resolvePath options
 
     Console.log $ "🗂 Creating output directory " <> genDir.relative
     _ <- FS.mkdir' genDir.absolute { mode: perm755, recursive: true }
 
+    fromMaybe (pure unit) $ ((\{ relative } -> Console.log $ "📤 Input CSS File " <> relative) <$> twInputCss)
+
     Console.log "🎬 Generating CSS Functions"
-    genCode <- generate { moduleName: options.moduleName, twConfigPath: twConfig.absolute }
+    genCode <- generate
+      { moduleName: options.moduleName
+      , twConfigPath: twConfig.absolute
+      , twInputCssPath: _.absolute <$> twInputCss
+      }
     _ <- FS.writeTextFile UTF8 genFile.absolute genCode
     Console.log $ "✅ Generated " <> genFile.relative
 
-    Console.log "🏁 Completed "
+    Console.log "🏁 Completed"
 
 type ResolvedPath =
   { twConfig :: { absolute :: String, relative :: String }
+  , twInputCss :: Maybe { absolute :: String, relative :: String }
   , genDir :: { absolute :: String, relative :: String }
   , genFile :: { absolute :: String, relative :: String }
   }
 
-resolvePath :: Options -> Aff ResolvedPath
-resolvePath { moduleName, twConfigPath: twConfig, outputDir: genDir } = do
-  processDir <- liftEffect $ Process.cwd
-  twConfig' <- liftEffect $ Path.resolve [ processDir ] twConfig
+resolvePath :: Options -> Effect ResolvedPath
+resolvePath { moduleName, twConfigPath: twConfig, outputDir: genDir, twInputCssPath: twInputCss } = do
+  processDir <- Process.cwd
+  twConfig' <- Path.resolve [ processDir ] twConfig
   let genDir' = Path.concat [ processDir, genDir ]
   let genFile = Path.concat [ genDir, moduleName <> ".purs" ]
-  genFile' <- liftEffect $ Path.resolve [ processDir ] genFile
+  genFile' <- Path.resolve [ processDir ] genFile
+  twInputCss' <-
+    case twInputCss of
+      Nothing -> pure Nothing
+      Just twInputCss_ -> do
+        twInputCss' <- Path.resolve [ processDir ] twInputCss_
+        pure $ Just { absolute: twInputCss', relative: twInputCss_ }
 
   pure
     { twConfig: { absolute: twConfig', relative: twConfig }
+    , twInputCss: twInputCss'
     , genDir: { absolute: genDir', relative: genDir }
     , genFile: { absolute: genFile', relative: genFile }
     }
@@ -71,6 +86,7 @@ parseArgs = do
 type Options =
   { moduleName :: String
   , twConfigPath :: FilePath
+  , twInputCssPath :: Maybe FilePath
   , outputDir :: FilePath
   }
 
@@ -82,6 +98,9 @@ argParser =
     , twConfigPath:
         Arg.argument [ "--config", "-c" ] "Path to tailwind.config.js"
           # Arg.default "./tailwind.config.js"
+    , twInputCssPath:
+        Arg.argument [ "--input", "-i" ] "Path to input css file"
+          # Arg.optional
     , moduleName:
         Arg.argument [ "--module-name", "-n" ] "Module name for the generated CSS function"
           # Arg.default "Tailwind"

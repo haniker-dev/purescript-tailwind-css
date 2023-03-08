@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-css-alone{
+  margin: 0;
+}
+
+.custom-css-parent .custom-css-child{
+  margin: 0;
+}
+
+div.custom-css-child-dot {
+  margin: 0;
+}
+
+div > .custom-css-child-greater {
+  margin: 0;
+}
