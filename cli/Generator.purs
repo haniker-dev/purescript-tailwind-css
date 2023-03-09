@@ -41,15 +41,22 @@ _generate moduleName baseClassNames resolvedConfig =
     [ "module " <> moduleName <> " where"
 
     -- Imports
+    , "import Data.Show (class Show)"
+    , "import Type.Prelude (Proxy(..))"
     , "import Tailwind.Class.Appendable (SkipAppendable, class Appendable)"
     , "import Tailwind.Class.MapPrefix (class MapPrefix)"
 
     -- Halogen integration
-    , "import Data.Symbol (class IsSymbol)"
+    , "import Data.Symbol (class IsSymbol, reflectSymbol)"
     , "import Halogen.HTML (IProp)"
     , "import Tailwind.Halogen as H"
     , "css :: ∀ tw a r i. IsSymbol a => tw a -> IProp (class :: String | r) i"
     , "css = H.css"
+
+    -- Tw Show Instance
+    , "instance IsSymbol a => Show (Tw a) where"
+    , "  show :: Tw a -> String"
+    , "  show _ = reflectSymbol (Proxy :: Proxy a)"
 
     -- Type Tw
     , "data Tw :: Symbol -> Type"
