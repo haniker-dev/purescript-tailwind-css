@@ -6,6 +6,7 @@ and generate the final combined CSS classnames _at compile time_
 for `tailwindcss` to detect and generate the CSS code.
 
 ## Example
+TODO Change this to halogen example
 ```
 module Example where
 
@@ -93,12 +94,21 @@ Generate your Tailwind CSS Functions
 Run
 
 ```bash
-purs-tailwind-css --output ./generated-src [--config ./tailwind.config.js]
+purs-tailwind-css
 
---config,-c         Path to tailwind.config.js
---help,-h           Show this help message.
---module-name,-n    Module name for the generated CSS function
---output,-o         Directory for the generated CSS function
+Usage:
+purs-tailwind-css --output ./generated-src --target halogen
+purs-tailwind-css --output ./generated-src [--config ./tailwind.config.js] [--input ./input.css] [--module-name Tailwind] [--target halogen]
+
+--config,-c              Path to tailwind.config.js
+                         Default: ./tailwind.config.js
+--help,-h                Show this help message.
+--input,-i               [optional] Path to input css file
+--module-name,-n         Module name for the generated CSS function
+                         Default: Tailwind
+--output,-o              Directory for the generated CSS function
+--target,-t [halogen]    Target HTML Framework.
+                         Default: No target
 ```
 
 Based on your `tailwind.config.js`, this will generate all the following files:

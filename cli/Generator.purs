@@ -1,4 +1,7 @@
-module Generator (generate) where
+module Generator
+  ( Target(..)
+  , generate
+  ) where
 
 import Prelude
 
@@ -12,23 +15,23 @@ import Generator.Config as Config
 import Generator.Utility (toFnName)
 import Node.Path (FilePath)
 
--- TODO Link back to cli for Halogen or no integration
--- data IntegrationTarget
---   = NoTarget
---   | Halogen
+data Target
+  = NoTarget
+  | Halogen
 
 type Input =
   { moduleName :: String
   , twConfigPath :: FilePath
   , twInputCssPath :: Maybe FilePath
+  , target :: Target
   }
 
 generate :: Input -> Aff String
-generate { moduleName, twConfigPath, twInputCssPath } = do
+generate { moduleName, twConfigPath, twInputCssPath, target } = do
   twConfig <- Config.loadTwConfig twConfigPath
   let resolvedTwConfig = Config.resolveTwConfig twConfig
   classes <- Base.classNames twConfig twInputCssPath
-  pure $ _generate moduleName classes resolvedTwConfig
+  pure $ _generate moduleName classes resolvedTwConfig target
 
 {-
   Note: 
@@ -37,42 +40,41 @@ generate { moduleName, twConfigPath, twInputCssPath } = do
   Purescript compiler (as of version 0.15.7) is slow in compiling and inferring on hover in IDE, etc.
   Hence, we generate a single large file as the output.
 -}
-_generate :: String -> Array String -> TwResolvedConfig -> String
-_generate moduleName baseClassNames resolvedConfig =
+_generate :: String -> Array String -> TwResolvedConfig -> Target -> String
+_generate moduleName baseClassNames resolvedConfig target =
   joinWith "\n" $
     [ "module " <> moduleName <> " where"
 
     -- Imports
-    , "import Data.Show (class Show)"
-    , "import Type.Prelude (Proxy(..))"
     , "import Tailwind.Class.Appendable (SkipAppendable, class Appendable)"
     , "import Tailwind.Class.MapPrefix (class MapPrefix)"
-
-    -- Halogen integration
-    , "import Data.Symbol (class IsSymbol, reflectSymbol)"
-    , "import Halogen.HTML (IProp)"
-    , "import Tailwind.Halogen as H"
-    , "css :: ∀ tw a r i. IsSymbol a => tw a -> IProp (class :: String | r) i"
-    , "css = H.css"
-
-    -- Tw Show Instance
-    , "instance IsSymbol a => Show (Tw a) where"
-    , "  show :: Tw a -> String"
-    , "  show _ = reflectSymbol (Proxy :: Proxy a)"
-
-    -- Type Tw
-    , "data Tw :: Symbol -> Type"
-    , "data Tw a = Tw"
-
-    -- Merge Tw types
-    , "merge :: forall a b c. Appendable a b c => Tw a -> Tw b -> Tw c"
-    , "merge _ _ = Tw"
-    , "infixr 5 merge as ~"
-
-    -- Sugar-syntax tw
-    , "tw :: Tw SkipAppendable"
-    , "tw = Tw"
     ]
+      <>
+        -- Integration Target
+        case target of
+          NoTarget -> []
+          Halogen ->
+            [ "import Data.Symbol (class IsSymbol)"
+            , "import Halogen.HTML (IProp)"
+            , "import Tailwind.Halogen as H"
+            , "css :: ∀ tw a r i. IsSymbol a => tw a -> IProp (class :: String | r) i"
+            , "css = H.css"
+            ]
+      <>
+        [
+          -- Type Tw
+          "data Tw :: Symbol -> Type"
+        , "data Tw a = Tw"
+
+        -- Merge Tw types
+        , "merge :: forall a b c. Appendable a b c => Tw a -> Tw b -> Tw c"
+        , "merge _ _ = Tw"
+        , "infixr 5 merge as ~"
+
+        -- Sugar-syntax tw
+        , "tw :: Tw SkipAppendable"
+        , "tw = Tw"
+        ]
       -- base functions
       <> (concat $ toBaseFn <$> baseClassNames)
 

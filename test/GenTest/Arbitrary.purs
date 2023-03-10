@@ -6,6 +6,7 @@ import Tailwind (Tw(..))
 import Tailwind.Class.MapPrefix (class MapPrefix)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
+import Test.Helper (print)
 
 arbitraryPadding :: Tw "p-[5px]"
 arbitraryPadding = Tw
@@ -16,7 +17,7 @@ arbitraryVariants _ = Tw
 spec :: Spec Unit
 spec = describe "Arbitrary" do
   it "p-[5px]" do
-    show arbitraryPadding `shouldEqual` "p-[5px]"
+    print arbitraryPadding `shouldEqual` "p-[5px]"
 
   it "[&:nth-child(3)]:" do
-    (show $ arbitraryVariants arbitraryPadding) `shouldEqual` "[&:nth-child(3)]:p-[5px]"
+    (print $ arbitraryVariants arbitraryPadding) `shouldEqual` "[&:nth-child(3)]:p-[5px]"

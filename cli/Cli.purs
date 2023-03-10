@@ -5,13 +5,13 @@ import Prelude
 import ArgParse.Basic as Arg
 import Data.Array as Array
 import Data.Either (Either(..))
-import Data.Maybe (Maybe)
+import Data.Maybe (Maybe(..))
 import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
-import Generator (generate)
+import Generator (Target(..), generate)
 import Node.Encoding (Encoding(..))
 import Node.FS.Aff as FS
 import Node.FS.Perms (Perms)
@@ -28,7 +28,7 @@ run = parseArgs >>= case _ of
   Right options -> launchAff_ do
     { genDir, genFile, twConfig, twInputCss } <- liftEffect $ resolvePath options
 
-    Console.log $ "🗂 Creating output directory " <> genDir.relative
+    Console.log $ "🗂  Creating output directory " <> genDir.relative
     _ <- FS.mkdir' genDir.absolute { mode: perm755, recursive: true }
 
     _ <- sequence $ Console.log <$> append "📤 Input CSS File " <$> _.relative <$> twInputCss
@@ -38,6 +38,7 @@ run = parseArgs >>= case _ of
       { moduleName: options.moduleName
       , twConfigPath: twConfig.absolute
       , twInputCssPath: _.absolute <$> twInputCss
+      , target: options.target
       }
     _ <- FS.writeTextFile UTF8 genFile.absolute genCode
     Console.log $ "✅ Generated " <> genFile.relative
@@ -82,7 +83,9 @@ parseArgs = do
   args <- Array.drop 2 <$> Process.argv
   pure $ Arg.parseArgs
     "purs-tailwind-css"
-    "purs-tailwind-css --output ./generated-src [--config ./tailwind.config.js]"
+    "\nUsage:\n\
+    \purs-tailwind-css --output ./generated-src --target halogen\n\
+    \purs-tailwind-css --output ./generated-src [--config ./tailwind.config.js] [--input ./input.css] [--module-name Tailwind] [--target halogen]"
     argParser
     args
 
@@ -91,6 +94,7 @@ type Options =
   , twConfigPath :: FilePath
   , twInputCssPath :: Maybe FilePath
   , outputDir :: FilePath
+  , target :: Target
   }
 
 argParser :: Arg.ArgParser Options
@@ -99,13 +103,28 @@ argParser =
     { outputDir:
         Arg.argument [ "--output", "-o" ] "Directory for the generated CSS function"
     , twConfigPath:
-        Arg.argument [ "--config", "-c" ] "Path to tailwind.config.js"
+        Arg.argument [ "--config", "-c" ]
+          "Path to tailwind.config.js\n\
+          \Default: ./tailwind.config.js"
           # Arg.default "./tailwind.config.js"
     , twInputCssPath:
-        Arg.argument [ "--input", "-i" ] "Path to input css file"
+        Arg.argument [ "--input", "-i" ] "[optional] Path to input css file"
           # Arg.optional
     , moduleName:
-        Arg.argument [ "--module-name", "-n" ] "Module name for the generated CSS function"
+        Arg.argument [ "--module-name", "-n" ]
+          "Module name for the generated CSS function\n\
+          \Default: Tailwind"
           # Arg.default "Tailwind"
+    , target:
+        Arg.argument [ "--target", "-t" ]
+          "Target HTML Framework.\n\
+          \Default: No target"
+          # Arg.optional
+          # Arg.unformat "[halogen]" decodeTarget
     }
     <* Arg.flagHelp
+
+decodeTarget :: Maybe String -> Either String Target
+decodeTarget Nothing = Right NoTarget
+decodeTarget (Just "halogen") = Right Halogen
+decodeTarget (Just s) = Left $ "Unknown option " <> s
