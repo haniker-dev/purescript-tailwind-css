@@ -101,30 +101,31 @@ argParser :: Arg.ArgParser Options
 argParser =
   Arg.fromRecord
     { outputDir:
-        Arg.argument [ "--output", "-o" ] "Directory for the generated CSS function"
+        Arg.argument [ "--output", "-o" ] "Directory for the generated CSS function."
     , twConfigPath:
         Arg.argument [ "--config", "-c" ]
           "Path to tailwind.config.js\n\
           \Default: ./tailwind.config.js"
           # Arg.default "./tailwind.config.js"
     , twInputCssPath:
-        Arg.argument [ "--input", "-i" ] "[optional] Path to input css file"
+        Arg.argument [ "--input", "-i" ] "[optional] Path to input css file."
           # Arg.optional
     , moduleName:
         Arg.argument [ "--module-name", "-n" ]
-          "Module name for the generated CSS function\n\
+          "Module name for the generated CSS function.\n\
           \Default: Tailwind"
           # Arg.default "Tailwind"
     , target:
         Arg.argument [ "--target", "-t" ]
           "Target HTML Framework.\n\
-          \Default: No target"
+          \Default: none"
           # Arg.optional
-          # Arg.unformat "[halogen]" decodeTarget
+          # Arg.unformat "[none, halogen]" decodeTarget
     }
     <* Arg.flagHelp
 
 decodeTarget :: Maybe String -> Either String Target
-decodeTarget Nothing = Right NoTarget
+decodeTarget Nothing = Right None
+decodeTarget (Just "none") = Right None
 decodeTarget (Just "halogen") = Right Halogen
 decodeTarget (Just s) = Left $ "Unknown option " <> s

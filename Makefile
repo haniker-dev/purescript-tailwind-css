@@ -18,7 +18,15 @@ run-test: ## Run test locally
 	spago test
 
 run-cli-test: ## Run cli to ./gen-test folder
-	./cli/purs-tailwind-css-dev.js --config ./test/tailwind.config.js --output ./gen-test --input ./test/input.css
+	./cli/purs-tailwind-css-dev.js --config ./test/tailwind.config.js \
+		--output ./gen-test \
+		--input ./test/Fixture/full.css \
+		--target none
+	./cli/purs-tailwind-css-dev.js --config ./test/tailwind.config.js \
+		--output ./gen-test \
+		--input ./test/Fixture/simple.css \
+		--module-name TailwindHalogen \
+		--target halogen
 
 run-cli-local: ## Run cli to ./gen-local folder which is git ignored
 	./cli/purs-tailwind-css-dev.js --config ./test/tailwind.config.js --output ./gen-local

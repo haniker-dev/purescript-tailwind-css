@@ -16,7 +16,7 @@ import Generator.Utility (toFnName)
 import Node.Path (FilePath)
 
 data Target
-  = NoTarget
+  = None
   | Halogen
 
 type Input =
@@ -52,7 +52,7 @@ _generate moduleName baseClassNames resolvedConfig target =
       <>
         -- Integration Target
         case target of
-          NoTarget -> []
+          None -> []
           Halogen ->
             [ "import Data.Symbol (class IsSymbol)"
             , "import Halogen.HTML (IProp)"
