@@ -6,6 +6,7 @@
   , "console"
   , "effect"
   , "either"
+  , "foldable-traversable"
   , "halogen"
   , "integers"
   , "maybe"

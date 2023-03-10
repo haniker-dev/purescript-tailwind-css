@@ -5,7 +5,8 @@ import Prelude
 import ArgParse.Basic as Arg
 import Data.Array as Array
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (Maybe)
+import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
@@ -30,7 +31,7 @@ run = parseArgs >>= case _ of
     Console.log $ "🗂 Creating output directory " <> genDir.relative
     _ <- FS.mkdir' genDir.absolute { mode: perm755, recursive: true }
 
-    fromMaybe (pure unit) $ ((\{ relative } -> Console.log $ "📤 Input CSS File " <> relative) <$> twInputCss)
+    _ <- sequence $ Console.log <$> append "📤 Input CSS File " <$> _.relative <$> twInputCss
 
     Console.log "🎬 Generating CSS Functions"
     genCode <- generate
@@ -51,25 +52,27 @@ type ResolvedPath =
   }
 
 resolvePath :: Options -> Effect ResolvedPath
-resolvePath { moduleName, twConfigPath: twConfig, outputDir: genDir, twInputCssPath: twInputCss } = do
-  processDir <- Process.cwd
-  twConfig' <- Path.resolve [ processDir ] twConfig
-  let genDir' = Path.concat [ processDir, genDir ]
-  let genFile = Path.concat [ genDir, moduleName <> ".purs" ]
-  genFile' <- Path.resolve [ processDir ] genFile
-  twInputCss' <-
-    case twInputCss of
-      Nothing -> pure Nothing
-      Just twInputCss_ -> do
-        twInputCss' <- Path.resolve [ processDir ] twInputCss_
-        pure $ Just { absolute: twInputCss', relative: twInputCss_ }
+resolvePath { moduleName, twConfigPath: twConfig, outputDir: genDir, twInputCssPath: twInputCss } =
+  let
+    resolve :: FilePath -> FilePath -> Effect { absolute :: String, relative :: String }
+    resolve baseDirr relative = do
+      absolute <- Path.resolve [ baseDirr ] relative
+      pure { absolute, relative }
+  in
+    do
+      processDir <- Process.cwd
+      twConfig' <- resolve processDir twConfig
+      let genDir' = Path.concat [ processDir, genDir ]
+      let genFile = Path.concat [ genDir, moduleName <> ".purs" ]
+      genFile' <- resolve processDir genFile
+      twInputCss' <- sequence $ resolve processDir <$> twInputCss
 
-  pure
-    { twConfig: { absolute: twConfig', relative: twConfig }
-    , twInputCss: twInputCss'
-    , genDir: { absolute: genDir', relative: genDir }
-    , genFile: { absolute: genFile', relative: genFile }
-    }
+      pure
+        { twConfig: twConfig'
+        , twInputCss: twInputCss'
+        , genDir: { absolute: genDir', relative: genDir }
+        , genFile: genFile'
+        }
 
 perm755 :: Perms
 perm755 = Perm.mkPerms Perm.all Perm.all (Perm.read + Perm.execute)
