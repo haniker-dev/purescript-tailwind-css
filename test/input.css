@@ -17,3 +17,43 @@ div.custom-css-child-dot {
 div > .custom-css-child-greater {
   margin: 0;
 }
+
+.custom-css-attribute-for[for="email"] {
+  margin: 0;
+}
+
+.custom-css-attribute-value[value^="Go"] {
+  margin: 0;
+}
+
+.custom-css-attribute-src[src$=".png"] {
+  margin: 0;
+}
+
+.custom-css-attribute-title[title~=create] {
+  margin: 0;
+}
+
+.custom-css-attribute-lang[lang|=nl] {
+  margin: 0;
+}
+
+.custom-css-pseudo-active:active {
+  margin: 0;
+}
+
+.custom-css-pseudo-after::after {
+  margin: 0;
+}
+
+.custom-css-pseudo-range:in-range {
+  margin: 0;
+}
+
+.custom-css-pseudo-nth:nth-child(2) {
+  margin: 0;
+}
+
+.custom-css-pseudo-lang:lang(fr) {
+  margin: 0;
+}

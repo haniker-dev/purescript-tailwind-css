@@ -1,4 +1,4 @@
-module Generator.Base (classNames, _getBaseCssClassNames) where
+module Generator.Base (classNames) where
 
 import Prelude
 
