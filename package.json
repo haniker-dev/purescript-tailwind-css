@@ -27,6 +27,8 @@
   "devDependencies": {
     "css-what": "^6.1.0",
     "postcss": "^8.4.21",
+    "purescript": "^0.15.9",
+    "spago": "^0.21.0",
     "tailwindcss": "^3.2.7"
   }
 }
