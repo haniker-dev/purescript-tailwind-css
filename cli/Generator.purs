@@ -18,6 +18,7 @@ import Node.Path (FilePath)
 data Target
   = None
   | Halogen
+  | Flame
 
 type Input =
   { moduleName :: String
@@ -60,6 +61,15 @@ _generate moduleName baseClassNames resolvedConfig target =
             , "import Halogen.HTML.Properties (class_)"
             , "css :: ∀ a r i. IsSymbol a => Tw a -> IProp (class :: String | r) i"
             , "css _ = class_ (ClassName (reflectSymbol (Proxy :: Proxy a)))"
+            ]
+          Flame ->
+            [ "import Data.Symbol (class IsSymbol, reflectSymbol)"
+            , "import Type.Prelude (Proxy(..))"
+            , "import Flame.Html.Attribute (class') "
+            , "import Flame.Types (NodeData)"
+            , "css :: ∀ a b. IsSymbol a => Tw a -> NodeData b"
+            , "css _ = class' (reflectSymbol (Proxy :: Proxy a))"
+
             ]
       <>
         [

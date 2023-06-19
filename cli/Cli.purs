@@ -120,7 +120,7 @@ argParser =
           "Target HTML Framework.\n\
           \Default: none"
           # Arg.optional
-          # Arg.unformat "[none, halogen]" decodeTarget
+          # Arg.unformat "[none, halogen, flame]" decodeTarget
     }
     <* Arg.flagHelp
 
@@ -128,4 +128,5 @@ decodeTarget :: Maybe String -> Either String Target
 decodeTarget Nothing = Right None
 decodeTarget (Just "none") = Right None
 decodeTarget (Just "halogen") = Right Halogen
+decodeTarget (Just "flame") = Right Flame
 decodeTarget (Just s) = Left $ "Unknown option " <> s
