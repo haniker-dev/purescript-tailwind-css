@@ -54,11 +54,12 @@ _generate moduleName baseClassNames resolvedConfig target =
         case target of
           None -> []
           Halogen ->
-            [ "import Data.Symbol (class IsSymbol)"
-            , "import Halogen.HTML (IProp)"
-            , "import Tailwind.Halogen as H"
-            , "css :: ∀ tw a r i. IsSymbol a => tw a -> IProp (class :: String | r) i"
-            , "css = H.css"
+            [ "import Data.Symbol (class IsSymbol, reflectSymbol)"
+            , "import Type.Prelude (Proxy(..))"
+            , "import Halogen.HTML (ClassName(..), IProp)"
+            , "import Halogen.HTML.Properties (class_)"
+            , "css :: ∀ a r i. IsSymbol a => Tw a -> IProp (class :: String | r) i"
+            , "css _ = class_ (ClassName (reflectSymbol (Proxy :: Proxy a)))"
             ]
       <>
         [

@@ -7,11 +7,8 @@
   , "effect"
   , "either"
   , "foldable-traversable"
-  , "halogen"
-  , "halogen-vdom"
   , "integers"
   , "maybe"
-  , "newtype"
   , "node-buffer"
   , "node-fs"
   , "node-fs-aff"
@@ -22,7 +19,6 @@
   , "spec-discovery"
   , "strings"
   , "typelevel-prelude"
-  , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
 , sources =
